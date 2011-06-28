@@ -1,4 +1,4 @@
-=== Image Store ===
+=== File Un-Attach ===
 Contributors: Hax
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8SJEQXK5NK4ES
 Tags: image,gallery,attach,attached,unattach,unattached,file,files,un-attach,assign,remove,detach,attachments
