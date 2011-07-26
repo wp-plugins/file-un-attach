@@ -102,6 +102,10 @@ class FunAdmin{
 	*@since 0.5.0
 	*/
 	function attachment_fields($form_fields, $post){
+		
+		//[alx359] added. If in media libary, do not create attach/unattach buttons
+		if(empty($this->tab)) return $form_fields;
+	
 		if($this->tab == 'gallery' || $this->tab == 'type' || (empty($this->tab)&&DOING_AJAX)){
 			$form_fields['menu_order'] = $this->image_sort[$post->ID];
 			$form_fields['funattach']  = array(
