@@ -35,8 +35,8 @@ if ( empty( $_REQUEST['action'] ) )
 function file_unattach_unattach_this( ) {
 	check_ajax_referer( "funajax" );
 
-	$postid = isset( $_GET['postid'] ) ? ( int ) $_GET['postid'] : false;
-	$imageid = isset( $_GET['imageid'] ) ?  ( int ) $_GET['imageid'] : false;
+	$postid = isset( $_POST['postid'] ) ? ( int ) $_POST['postid'] : false;
+	$imageid = isset( $_POST['imageid'] ) ?  ( int ) $_POST['imageid'] : false;
 
 	if( !$imageid )
 		return;
@@ -57,11 +57,11 @@ function file_unattach_unattach_this( ) {
 function file_unattach_attach_this( ) {
 	check_ajax_referer( "funajax" );
 	
-	if( empty( $_GET['postid'] ) || empty( $_GET['imageid'] ) )
+	if( empty( $_POST['postid'] ) || empty( $_POST['imageid'] ) )
 		return false;
 	
-	$postid = ( int ) $_GET['postid'];
-	$imageid = ( int ) $_GET['imageid'];
+	$postid = ( int ) $_POST['postid'];
+	$imageid = ( int ) $_POST['imageid'];
 
 	add_post_meta( $imageid, '_fun-parent', $postid );
 }
@@ -77,29 +77,24 @@ function file_unattach_find_posts( ) {
 
 	check_ajax_referer( "funajax" );
 	
-	if ( empty( $_GET['ps'] ) )
+	if ( empty( $_POST['ps'] ) || empty( $_POST['type'] ) )
 		exit;
 
 	global $wpdb;
-	
-	$post_types = get_post_types( array( 'public' => true ), 'objects' );
-	
-	unset( $post_types['ims_image'] );
-	unset( $post_types['attachment'] );
-	
-	$s = stripslashes( $_GET['ps'] );
+		
+	$s = stripslashes( $_POST['ps'] );
 	$searchand = $search = '';
 	$args = array(
 		'post_status' => 'any',
 		'posts_per_page' => 50,
-		'post_type' => array_keys( $post_types ),
+		'post_type' => $_POST['type'],
 	);
 	
 	if ( '' !== $s )
 		$args['s'] = $s;
 		
-	if( !empty( $_GET['exclude'] ))
-		$args['exclude'] = explode( ',', trim($_GET['exclude'], ',') );
+	if( !empty( $_POST['exclude'] ))
+		$args['exclude'] = explode( ',', trim($_POST['exclude'], ',') );
 
 	$posts = get_posts( $args );
 
@@ -169,13 +164,13 @@ function file_unattach_is_attached( ){
 	
 	check_ajax_referer( "funajax" );
 	
-	if ( empty( $_GET['img'] ) || empty( $_GET['postid'] ))
+	if ( empty( $_POST['img'] ) || empty( $_POST['postid'] ))
 		exit;
 
 	global $wpdb;
 
-	$postid = ( int ) $_GET['postid'];
-	$imageid = ( int ) $_GET['img'];
+	$postid = ( int ) $_POST['postid'];
+	$imageid = ( int ) $_POST['img'];
 	
 	$posts = $wpdb->get_results( 
 		$wpdb->prepare( 
@@ -214,12 +209,12 @@ function file_unattach_find_attached( ) {
 
 	check_ajax_referer( "funajax" );
 	
-	if ( empty( $_GET['img'] ) )
+	if ( empty( $_POST['img'] ) )
 		exit;
 
 	global $wpdb;
 
-	$postid = ( int ) $_GET['img'];
+	$postid = ( int ) $_POST['img'];
 	$post_types = get_post_types( array( 'public' => true ), 'objects' );
 	
 	unset( $post_types['ims_image'] );
@@ -298,7 +293,27 @@ function file_unattach_find_attached( ) {
 	die( );
 }
 
-switch ( $_GET['action'] ) {
+
+function file_unattach_attach_multiple(){
+	
+	check_ajax_referer( "funajax" );
+	
+	if ( empty( $_POST['images'] ) ||  empty( $_POST['postid'] ) || empty( $_POST['directive'] ) )
+		exit;
+	
+	$postid = ( int ) $_POST['postid'];
+	$images = ( array ) $_POST['images'];
+	
+	foreach( $images as $imageid ){
+		if( $_POST['directive']  == 'attach' )
+			add_post_meta( $imageid, '_fun-parent', $postid );
+		else if( $_POST['directive']  == 'detach' )
+			delete_post_meta( $imageid, '_fun-parent', $postid );
+	}
+}
+
+
+switch ( $_POST['action'] ) {
 	case 'attach':
 		file_unattach_attach_this( );
 		break;
@@ -310,6 +325,9 @@ switch ( $_GET['action'] ) {
 		break;
 	case 'find_attached':
 		file_unattach_find_attached( );
+		break;
+	case 'attach_multiple':
+		file_unattach_attach_multiple( );
 		break;
 	case 'unattach':
 		file_unattach_unattach_this( );
