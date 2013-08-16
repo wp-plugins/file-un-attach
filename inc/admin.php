@@ -196,6 +196,8 @@ class FunAdmin {
 			'postid' => $postid,
 			'attach' => __( 'Attach', 'fun' ),
 			'detach' => __( 'Detach', 'fun' ),
+			'attached' => __( 'Attached', 'fun' ),
+			'detached' => __( 'Detached', 'fun' ),
 			'adminurl' => FUNATTACH_URL,
 			'nonceajax' => wp_create_nonce( 'funajax' ),
 		 ) ) );
@@ -354,6 +356,14 @@ class FunAdmin {
                         <input type="hidden" name="post" value="<?php echo esc_attr( $post->ID ) ?>" />
                         <input type="hidden" name="action" value="<?php echo esc_attr( $_GET['action'] ); ?>" />
                    		<?php } ?>
+						
+						<?php if($types = get_post_types( array( 'public' => true ) ) ) { ?>
+							<label ><?php _e( 'Post type', 'fun' ) ?><select id="fun_post_type">
+							<?php foreach( $types as $type ) { ?>
+								<option value="<?php echo esc_attr( $type ) ?>" ><?php echo  $type ?></option>
+							<?php } ?>
+							</select></label>
+						<?php } ?>
                             
 						<input type="hidden" name="affected" id="fun-affected" value="" />
 						<label class="screen-reader-text" for="find-posts-input"><?php _e( 'Search', 'fun' ); ?></label>
