@@ -55,9 +55,12 @@ class FunAdmin {
 	 * @since 1.0.5
 	 */
 	function enqueue_media(){
+		global $wp_version;
 		remove_action( 'admin_footer', 'wp_print_media_templates' );
-		
-		require_once FUNATTACH_ABSPATH. '/inc/media-template.php';
+		if( $wp_version >= '3.9' )
+			require_once FUNATTACH_ABSPATH. '/inc/media-template.3.9.php';
+		else
+			require_once FUNATTACH_ABSPATH. '/inc/media-template.php';
 		add_action( 'admin_footer', 'fun_print_media_templates' );
 	}
 	
