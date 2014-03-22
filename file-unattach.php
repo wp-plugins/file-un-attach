@@ -8,7 +8,7 @@
 	Version: 1.0.7
 	Author URI: http://www.xparkmedia.com
 	Requires at least: 3.1.0
-	Tested up to: 3.5.0
+	Tested up to: 3.9.0
 	
 	Copyright 2010-2011 by Hafid Trujillo http://www.xparkmedia.com
 	
