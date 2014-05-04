@@ -141,7 +141,7 @@ function fun_print_media_templates() {
 			<# } else if ( 'image' === data.type ) { #>
 				<div class="thumbnail">
 					<div class="centered">
-						<img src="{{ data.size.url }}" draggable="false" />
+						<img src="{{ data.size.url }}" data-attach="{{data.id}}" draggable="false" />
 					</div>
 				</div>
 			<# } else { #>
