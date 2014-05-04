@@ -101,7 +101,6 @@ function file_unattach_find_posts( ) {
 	if ( !$posts )
 		wp_die( __( 'No items found.' ) );
 
-	$postids = array( );
 	$html = '<table class="widefat fun-search-results" cellspacing="0"><thead>
 	<tr><th class="found-radio">' . esc_attr__( 'Attached', 'fun' ) . '</th>
 	<th>' . esc_attr__( 'Title', 'fun' ) . '</th>
@@ -110,10 +109,6 @@ function file_unattach_find_posts( ) {
 	<th>' . esc_attr__( 'Status', 'fun' ) . '</th></tr></thead><tbody>';
 
 	foreach ( $posts as $post ) {
-
-		if ( isset( $post->ID ) )
-			$postids[] = $post->ID;
-
 		switch ( $post->post_status ) {
 			case 'publish' :
 			case 'private' :
@@ -235,8 +230,6 @@ function file_unattach_find_attached( ) {
 		, $postid, $postid ) 
 	 );
 
-	$postids = array( );
-
 	$html = '<table class="widefat fun-search-results" cellspacing="0"><thead>
 	<tr><th class="found-radio">' . esc_attr__( 'Attached', 'fun' ) . '</th>
 	<th>' . esc_attr__( 'Title', 'fun' ) . '</th>
@@ -246,10 +239,6 @@ function file_unattach_find_attached( ) {
 	</thead><tbody>';
 
 	foreach ( $posts as $post ) {
-
-		if ( isset( $post->ID ) )
-			$postids[] = $post->ID;
-
 		switch ( $post->post_status ) {
 			case 'publish' :
 			case 'private' :
@@ -281,7 +270,7 @@ function file_unattach_find_attached( ) {
 		$html .= '</tr>' . "\n\n";
 	}
 	$html .= '</tbody></table>';
-	$html .= '<input name="fun-current-attached" type="hidden" value="' . esc_attr( implode( ',', $postids ) ) . '" />';
+	$html .= '<input name="fun-current-attached" type="hidden" value="' . esc_attr( implode( ',', get_post_meta( $postid, "_fun-parent" ) ) ) . '" />';
 
 	$x = new WP_Ajax_Response( );
 	$x->add( array( 

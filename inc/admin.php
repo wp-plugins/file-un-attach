@@ -191,7 +191,7 @@ class FunAdmin {
 	 * @since 0.5.0
 	 */
 	function load_admin_scripts( ) {
-		global $post;	
+		global $post, $pagenow;	
 		
 		$postid = ( isset( $post->ID ) )	 ? $post->ID : false;
 		wp_enqueue_script( 'fun-admin', FUNATTACH_URL . 'admin.js', array( 'jquery' ), 'fun' , true );
@@ -204,6 +204,11 @@ class FunAdmin {
 			'adminurl' => FUNATTACH_URL,
 			'nonceajax' => wp_create_nonce( 'funajax' ),
 		 ) ) );
+		 
+		 if( $pagenow == 'upload.php' ){
+			wp_enqueue_script( 'wp-ajax-response' );
+			wp_enqueue_script( 'jquery-ui-draggable' );
+		}
 	}
 
 	/**
@@ -296,9 +301,8 @@ class FunAdmin {
 			if ( empty( $_GET['fun-search'] ) ) {
 				$attached = explode( ',', $_GET['fun-current-attached'] );
 				foreach ( $attached as $id ) {
-					if ( isset( $_GET['found_post'][$id] ) || !is_numeric( $id ) )
-						continue;
-					delete_post_meta( $imageid, '_fun-parent', $id );
+					if ( is_numeric( $id ) && ! isset( $_GET['found_post'][$id] ) )
+						delete_post_meta( $imageid, '_fun-parent', $id );
 				}
 			}
 			
@@ -360,7 +364,7 @@ class FunAdmin {
                         <input type="hidden" name="action" value="<?php echo esc_attr( $_GET['action'] ); ?>" />
                    		<?php } ?>
 						
-						<?php if($types = get_post_types( array( 'public' => true ) ) ) { ?>
+						<?php if( $types = get_post_types( array( 'public' => true) ) ) { ?>
 							<label ><?php _e( 'Post type', 'fun' ) ?><select id="fun_post_type">
 							<?php foreach( $types as $type ) { ?>
 								<option value="<?php echo esc_attr( $type ) ?>" ><?php echo  $type ?></option>

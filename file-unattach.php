@@ -5,10 +5,10 @@
 	Plugin URI: http://www.xparkmedia.com
 	Description: Attach multiple file to a post and unattch them also.
 	Author: Hafid R. Trujillo Huizar
-	Version: 1.0.8
+	Version: 1.1.0
 	Author URI: http://www.xparkmedia.com
 	Requires at least: 3.1.0
-	Tested up to: 3.9.0
+	Tested up to: 4.0
 	
 	Copyright 2010-2011 by Hafid Trujillo http://www.xparkmedia.com
 	
@@ -42,7 +42,7 @@ if ( !class_exists( 'FileUnattach' ) ) {
 		 * @param $domain plugin Gallery IDentifier
 		 * Make sure that new language( .mo ) files have 'fua-' as base name
 		 */
-		var $version = '1.0.7';
+		var $version = '1.1.0';
 
 		/**
 		 * Constructor
