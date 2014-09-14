@@ -207,7 +207,7 @@ class FunAdmin {
 			'nonceajax' => wp_create_nonce( 'funajax' ),
 		 ) ) );
 		 
-		 if( $pagenow == 'upload.php' ){
+		 if( in_array( $pagenow, array( 'upload.php', 'post.php' )) ){
 			wp_enqueue_script( 'wp-ajax-response' );
 			wp_enqueue_script( 'jquery-ui-draggable' );
 		}
